@@ -1,0 +1,29 @@
+plugins {
+    id "java-library"
+    id "com.zyxist.chainsaw" version "0.3.1"
+    id 'com.palantir.docker' version "0.20.1"
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = "11"
+
+group "ud.examples"
+version "0.0.1-SNAPSHOT"
+
+dependencies {
+    compile "io.helidon.webserver:helidon-webserver:0.10.5"
+    compile "io.helidon.webserver:helidon-webserver-netty:0.10.5"
+}
+
+docker {
+    name "image-server:${version}"
+    files configurations.compileClasspath, "${jar.archivePath}"
+    copySpec.from("images").into("app")
+}
+
+test {
+    useJUnitPlatform()
+}
